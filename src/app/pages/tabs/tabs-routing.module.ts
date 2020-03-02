@@ -4,6 +4,10 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
+    path: '/',
+    redirectTo: 'tab1'
+  },
+  {
     path: 'tabs',
     component: TabsPage,
     children: [
