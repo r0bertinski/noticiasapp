@@ -20,21 +20,32 @@ const httpOptions = {
 })
 export class NoticiasService {
 
+  headLinesPage = 0;
+  currentCategory = '';
   constructor( private http: HttpClient ) { }
 
   private ejecturaQuery<T>( query: string) {
-    query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
-    return this.http.get<T>( query );
+    // query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
+    query = `${apiUrl}/${apiVersion}${query}`;
+    return this.http.get<T>( query,  httpOptions );
 
   }
 
   getTopHeadLines() {
-    return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us`);
+    this.headLinesPage++;
+    return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&page=${this.headLinesPage}`);
   }
 
   // business entertainment general health science sports technology
   getTopHeadlinesCategory( categoria: string ) {
-    return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&category=${categoria}`);
+    if ( this.currentCategory  !== categoria ){
+      this.currentCategory = categoria;
+      this.headLinesPage = 0;
+    } else {
+      this.headLinesPage++;
+    }
+    console.log('headLinesPage', this.headLinesPage);
+    return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&category=${categoria}&page=${this.headLinesPage}`);
 
   }
 }
