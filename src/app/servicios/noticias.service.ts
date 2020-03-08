@@ -8,12 +8,12 @@ const apiUrl = environment.apiUrl;
 const apiVersion = environment.apiVersion;
 
 // CORS error.
-const httpOptions = {
-  headers: new HttpHeaders({
-    'X-Api-key': apiKey,
-    'Access-Control-Allow-Origin': '*'
-  })
-};
+// const httpOptions = {
+//   headers: new HttpHeaders({
+//     'X-Api-key': apiKey,
+//     'Access-Control-Allow-Origin': '*'
+//   })
+// };
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +26,18 @@ export class NoticiasService {
 
   private ejecturaQuery<T>( query: string) {
     // query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
-    query = `${apiUrl}/${apiVersion}${query}`;
-    return this.http.get<T>( query,  httpOptions );
+    query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
+    // return this.http.get<T>( query,  httpOptions );
+    return this.http.get<T>( query );
+
 
   }
 
   getTopHeadLines() {
     this.headLinesPage++;
+    // return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&page=${this.headLinesPage}`);
     return this.ejecturaQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&page=${this.headLinesPage}`);
+
   }
 
   // business entertainment general health science sports technology
