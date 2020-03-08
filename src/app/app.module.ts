@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { ToastController } from '@ionic/angular';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { IonicStorageModule } from '@ionic/storage';
     AppRoutingModule,
     HttpClientModule,
     IonicStorageModule.forRoot()],
+ 
   providers: [
     StatusBar,
     SplashScreen,
