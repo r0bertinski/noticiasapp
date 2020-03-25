@@ -4,6 +4,7 @@ import { Plugins } from '@capacitor/core';
 import { ActionSheetController } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { DataLocalServiceService } from '../../servicios/data-local-service.service';
+import { Platform } from '@ionic/angular';
 
 
 @Component({
@@ -20,9 +21,10 @@ export class NoticiaComponent implements OnInit {
 
   // console.log('shareRet', shareRet);
   constructor( 
-    private socialSharing: SocialSharing, 
+    private socialSharing: SocialSharing,
     private actionSheetCtrl: ActionSheetController,
-    private datalocalService: DataLocalServiceService) { }
+    private datalocalService: DataLocalServiceService,
+    private platform: Platform) { }
 
   ngOnInit() {
     console.log('Favoritos', this.enFavoritos);
@@ -46,8 +48,7 @@ export class NoticiaComponent implements OnInit {
       handler: () => {
         console.log('Borrar de favoritos');
         this.datalocalService.borrarNoticia( this.noticia );
-      }
-    }
+      }}
     } else {
       {
         guararBorrarBtn = { text: 'Favorito',
@@ -60,6 +61,7 @@ export class NoticiaComponent implements OnInit {
       }
      }
     }
+
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [
         {
@@ -67,16 +69,10 @@ export class NoticiaComponent implements OnInit {
           icon: 'share',
           cssClass: 'action-dark',
           handler: () => {
-              this.socialSharing.share(
-              this.noticia.title,
-              this.noticia.source.name,
-              '',
-              this.noticia.url
-            );
+            this.compartirNoticia();
           }
-        }, 
-          guararBorrarBtn,
-        
+        },        
+           guararBorrarBtn,        
         {
           text: 'Cancel',
           icon: 'close',
@@ -85,11 +81,33 @@ export class NoticiaComponent implements OnInit {
           handler: () => {
             console.log('Cancel clicked')
           }
-        }
-     
+        }    
       ]
     });
 
     await actionSheet.present();
+  }
+
+  compartirNoticia() {
+    if ( this.platform.is('cordova') ){
+      this.socialSharing.share(
+        this.noticia.title,
+        this.noticia.source.name,
+        '',
+        this.noticia.url
+      );
+    } else {
+      if ( navigator['share'] ) {
+        navigator['share']({
+          title: this.noticia.title,
+          text: this.noticia.description,
+          url: this.noticia.url,
+        })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      }else{
+        console.log('Sorry papi, but your browser does not support this feature');
+      }
+    }
   }
 }

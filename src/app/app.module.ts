@@ -13,6 +13,8 @@ import { AppComponent } from './app.component';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import { ToastController } from '@ionic/angular';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    IonicStorageModule.forRoot()],
+    IonicStorageModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
  
   providers: [
     StatusBar,

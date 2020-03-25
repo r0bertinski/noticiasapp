@@ -15,6 +15,17 @@ const apiVersion = environment.apiVersion;
 //   })
 // };
 
+const httpOptions = {
+  headers: new HttpHeaders({
+    'X-Api-key': apiKey,
+    // 'Access-Control-Allow-Origin': '*',
+    // 'Content-Type':  'application/json',
+     'Content-Type':  'text/plain'
+    
+  })
+};
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +39,7 @@ export class NoticiasService {
     // query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
     query = `${apiUrl}/${apiVersion}${query}&apiKey=${apiKey}`;
     // return this.http.get<T>( query,  httpOptions );
-    return this.http.get<T>( query );
+    return this.http.get<T>( query, httpOptions );
 
 
   }
